@@ -13,11 +13,11 @@ function Home() {
             <img src={image7} alt="Background" className="hero-image" />
             <div className="hero-overlay">
               <div className="hero-text">
-                <h1>Perfect Rooms To Book</h1>
+                <h1>King Faisal Operation Rooms</h1>
                 <p>
-                  Find your ideal room effortlessly with our advanced search
-                  tools. Filter by location, date, and preferences to make your
-                  stay perfect.
+                  Effortlessly discover your perfect room with our advanced
+                  search tools. Customize your search by location, dates, and
+                  preferences to ensure an ideal Operation.
                 </p>
                 <button className="cta-button">Get Started</button>
               </div>

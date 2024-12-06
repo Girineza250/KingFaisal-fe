@@ -1,4 +1,3 @@
-
 import {
   BookInputs,
   RoomInputs,
@@ -17,6 +16,7 @@ import Signin from "../componets/signupFiles/Signin";
 import Signup from "../componets/signupFiles/signup";
 import AdminRoute from "./AdminRoute";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import UserRoutes from "./UserRoutes";
 import Setting from "../componets/DashboardComponents/single/settings";
@@ -26,75 +26,130 @@ import { ContactPage } from "@mui/icons-material";
 import ContactP from "../componets/signupFiles/ContactP";
 import AddRoomName from "../componets/DashboardComponents/new/AddRoomName";
 import RenderRoom from "../componets/DashboardComponents/components/table/RenderRoom";
-
+import ChangePAssword from "../componets/signupFiles/ChangePAssword";
+import { EmailProvider } from "../componets/Services/EmailProvider";
+import Report from "../componets/Report/Report";
 
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="Login" element={<Signin />} />
-          <Route path="RequestRom" element={<UserRoutes><RoomContainer /></UserRoutes>} />
+          <Route
+            path="ChangePassword"
+            element={
+              <EmailProvider>
+                <ChangePAssword />
+              </EmailProvider>
+            }
+          />
+          <Route
+            path="Report"
+            element={
+              <AdminRoute>
+                <Report title="Report" />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="RequestRom"
+            element={
+              <UserRoutes>
+                <RoomContainer />
+              </UserRoutes>
+            }
+          />
           <Route path="signupPage" element={<Signup />} />
-          <Route path="Contacts" element={<ContactPage/>}/>
-          <Route index path="Dashboard" element={
-            <AdminRoute><Landing/></AdminRoute>
-          
-          } />
+          <Route path="Contacts" element={<ContactPage />} />
+          <Route
+            index
+            path="Dashboard"
+            element={
+              <AdminRoute>
+                <Landing />
+              </AdminRoute>
+            }
+          />
 
           <Route path="Users/*">
-            <Route  element={
-              <AdminRoute><Landing /></AdminRoute>
-            
-            } />
-            <Route path="ListAllusers"  element={
-            <AdminRoute><RenderUsers title="ListAllusers" /></AdminRoute>
-            } />
+            <Route
+              element={
+                <AdminRoute>
+                  <Landing />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="ListAllusers"
+              element={
+                <AdminRoute>
+                  <RenderUsers title="ListAllusers" />
+                </AdminRoute>
+              }
+            />
             <Route path=":userId" element={<Setting />} />
-            <Route path="new-user" element={
-              <AdminRoute><Signup inputs={UserInputs} title="Add New user" /></AdminRoute>
-            
-            } />
-           
+            <Route
+              path="new-user"
+              element={
+                <AdminRoute>
+                  <Signup inputs={UserInputs} title="Add New user" />
+                </AdminRoute>
+              }
+            />
           </Route>
 
           <Route path="Bookings/*">
-            <Route  element={
-            <AdminRoute><Table title="Bookings Rooms" /></AdminRoute>} />
-            <Route path="new-bookings" element={<Table inputs={BookInputs} title="Booking Rooms" />} />
+            <Route
+              element={
+                <AdminRoute>
+                  <Table title="Bookings Rooms" />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="new-bookings"
+              element={<Table inputs={BookInputs} title="Booking Rooms" />}
+            />
           </Route>
 
           <Route path="Rooms/*">
-            <Route path="List-Availble-Rooms" element={<AdminRoute><RenderRoom title="Available Some Rooms" /></AdminRoute>} />
-            <Route path="List-Booked-Rooms" element={
-            <AdminRoute><RenderRoom title="Booked  Rooms" /></AdminRoute>
-            } />
+            <Route
+              path="List-Availble-Rooms"
+              element={
+                <AdminRoute>
+                  <RenderRoom title="Available Some Rooms" />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="List-Booked-Rooms"
+              element={
+                <AdminRoute>
+                  <RenderRoom title="Booked  Rooms" />
+                </AdminRoute>
+              }
+            />
 
-            <Route path="new-rooms" element={
-            <New inputs={RoomInputs} title="Add Some Rooms Here" />
-          
-            
-            } />
-            <Route path="addNewRoom" element={
-            <AddRoomName inputs={RoomInputs} title="Add room Name" />
-          
-            
-            } />
+            <Route
+              path="new-rooms"
+              element={<New inputs={RoomInputs} title="Add Some Rooms Here" />}
+            />
+            <Route
+              path="addNewRoom"
+              element={
+                <AddRoomName inputs={RoomInputs} title="Add room Name" />
+              }
+            />
             {/* <New path="AddName-toRoomm" title="new Room Name"/> */}
           </Route>
 
-         
-
-          
-
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/ContactsPage" element={
-            <ContactP/>
-          }/>
+        <Route path="/ContactsPage" element={<ContactP />} />
       </Routes>
-      
     </div>
   );
 }

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./signup.scss";
+import "./signup.css";
 import useFetch from "../../hooks/useFetch";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import authService from "../Services/authService";
+import { Navigate, useNavigate } from "react-router";
+import { showSuccessToast } from "../../utils/ToastConfog";
+import Navbar from "../navigationBar/navbar";
 
 function Signup() {
   const [error, setError] = useState(null);
@@ -15,13 +18,14 @@ function Signup() {
     empNo: "",
     mobileNo: "",
     position: "",
-    unitID: "" ,
+    unitID: "",
     department: "",
   });
 
   const { data: units } = useFetch({
     url: process.env.REACT_APP_FETCH_UNITS,
   });
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,25 +37,22 @@ function Signup() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+            Authorization: `Bearer ${authService.getToken()}`,
           },
         }
       );
 
       if (response.status === 200) {
         setError(null);
-        setSuccessMessage("Account successfully created!");
+        showSuccessToast("Account successfully created!");
+
         setTimeout(() => {
           setSuccessMessage(null);
         }, 4000);
-
-        console.log("successfully saved");
-        console.log(response.data, response.status);
+        navigate("/Login");
       } else {
         if (response.data && response.data.msg) {
           setError(response.data.msg);
-
-          // Clear error message after 3000 milliseconds (3 seconds)
           setTimeout(() => {
             setError(null);
           }, 4000);
@@ -63,7 +64,6 @@ function Signup() {
       console.error("Error during signup:", err);
       setError(err.message);
 
-
       setTimeout(() => {
         setError(null);
       }, 4000);
@@ -72,24 +72,20 @@ function Signup() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     setCredentials((prevCredentials) => ({
       ...prevCredentials,
       [name]: name === "unitID" ? parseInt(value, 10) : value,
     }));
   };
-  
-  
-  
-  
-  
+
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
+    <div className="container mt-5  w-full">
+      <div className=" justify-content-center">
         <div className="col-md-8">
           <form
             action=""
-            className="user-form p-3 border"
+            className="user-form p-3 w-96  border"
             onSubmit={handleSubmit}
           >
             <h2 className="text-center mb-4">Create Account</h2>
@@ -140,7 +136,7 @@ function Signup() {
               </div>
               <div className="col-md-6">
                 <label htmlFor="empNo" className="form-label">
-                  Employee Number
+                  Doctor ID number
                 </label>
                 <input
                   type="text"
@@ -173,21 +169,20 @@ function Signup() {
                   Unit
                 </label>
                 <select
-  id="selectBox"
-  onChange={handleChange}
-  name="unitID" 
-  value={credentials.unitID}
-  className="form-select"
->
-  <option value="">Select a Unit</option>
-  {units &&
-    units.map((unit) => (
-      <option key={unit.unitID} value={unit.unitID}>
-        {unit.unitName}
-      </option>
-    ))}
-</select>
-
+                  id="selectBox"
+                  onChange={handleChange}
+                  name="unitID"
+                  value={credentials.unitID}
+                  className="form-select"
+                >
+                  <option value="">Select a Unit</option>
+                  {units &&
+                    units.map((unit) => (
+                      <option key={unit.unitID} value={unit.unitID}>
+                        {unit.unitName}
+                      </option>
+                    ))}
+                </select>
               </div>
             </div>
             <div className="mb-3">
@@ -208,9 +203,11 @@ function Signup() {
               <div className="alert alert-success">{successMessage}</div>
             )}
             {error && <div className="alert alert-danger">{error}</div>}
-            <button type="submit" className="green-btn btn-success ">
-              Register
-            </button>
+            <div className="regbtn">
+              <button type="submit" className="green-btn">
+                Register
+              </button>
+            </div>
           </form>
         </div>
       </div>
